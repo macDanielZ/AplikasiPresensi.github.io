@@ -66,7 +66,7 @@ Route::delete('/admin/kelas/hapus/{id}',[AdminController::class,'hapus_kelas'])-
 Route::middleware('CheckRole:Manajemen')->group(function(){
 Route::get('/manajemen',[AdminController::class,'rekap'])->name('manajemen');
 Route::get('/manajemen/rekapitulasi/cari-kelas',[AdminController::class,'rekap_cari_kelas'])->name('manajemen.rekap_cari_kelas');
-Route::get('/manajemen/export-excel', 'AdminController@exportExcel')->name('manajemen.export_excel');
+Route::get('/Manajemen/export-excel', 'AdminController@exportExcel')->name('manajemen.export_excel');
 });
 
 

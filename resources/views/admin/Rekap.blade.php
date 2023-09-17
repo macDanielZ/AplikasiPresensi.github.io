@@ -10,6 +10,19 @@
     <script src="/js/jquery.js"></script>
     <link rel="stylesheet" href="/fontawesome/css/all.min.css">
 
+    {{-- PWA --}}
+    <link rel="manifest" href="/manifest.json">
+    <script src="/pwa.js"></script>
+    <script src="/sw.js"></script>
+    <link rel="apple-touch-icon" href="images/hello-icon-152.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="white"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Hello World">
+    <meta name="msapplication-TileImage" content="images/hello-icon-144.png">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+
     {{-- A --}}
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -74,6 +87,7 @@
             justify-content: center;
             margin-left : 10px;
         }
+
         .logout-container button{
             background-color: transparent;
             border : none;
@@ -117,9 +131,9 @@
         <div style="display: flex; float-right">
             <div class="logout-container">
                 <form action="{{route('logout')}}" method="POST">
-                    @csrf
-                    <button><i  class="fa-solid fa-arrow-right-from-bracket"></i></button>
-                    </form>
+                @csrf
+                <button><i  class="fa-solid fa-arrow-right-from-bracket"></i></button>
+                </form>
             </div>
             <div id="home" class="logout-container">
                 <i  class="fa-solid fa-house"></i>
@@ -142,13 +156,14 @@
             </form> 
             <tr>
                 {{-- Form Cari Kelas --}}
-                @if($jabatan == 'Manajemen')
-                <form action="{{route('manajemen.rekap_cari_kelas')}}">
-
-                @elseif($jabatan == 'Admin')
-                <form action="{{route('admin.rekap_cari_kelas')}}">
-                
-                @endif
+                @php
+                    if($jabatan == 'Manajemen'){
+                        $link = 'manajemen.rekap_cari_kelas';
+                    }else{
+                        $link = 'admin.rekap_cari_kelas';
+                    }
+                @endphp
+                <form action='{{route("$link")}}'>
                     
                 <td>Kelas</td>
                 <td><select name="kelas" id="kelas">
@@ -292,8 +307,7 @@
                         extend: 'excelHtml5',
                         text: 'Export',
                         filename: 'Laporan Rekapitulasi Social Sunday | '+currentDate,
-                        action : {
-                            url : "/{{$jabatan}}/export-excel"
+                        exportOptions: {
                         }
                     }
                 ]

@@ -10,6 +10,19 @@
     <script src="/js/jquery.js"></script>
     <link rel="stylesheet" href="/fontawesome/css/all.min.css">
     <title>Presensi</title>
+
+     {{-- PWA --}}
+     <link rel="manifest" href="/manifest.json">
+     <script src="/pwa.js"></script>
+     <script src="/sw.js"></script>
+     <link rel="apple-touch-icon" href="images/hello-icon-152.png">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta name="theme-color" content="white"/>
+     <meta name="apple-mobile-web-app-capable" content="yes">
+     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+     <meta name="apple-mobile-web-app-title" content="Hello World">
+     <meta name="msapplication-TileImage" content="images/hello-icon-144.png">
+     <meta name="msapplication-TileColor" content="#FFFFFF">
     <style>
         html,body{
             height: 100%;
@@ -46,6 +59,23 @@
         .logout-container button{
             background-color: transparent;
             border : none;
+        }
+        .alert-danger {
+            background-color: #ffcccc; /* Lighter red color */
+            border-color: #ff9999; /* Lighter border color */
+            color: #990000; /* Darker text color */
+            font-weight: bold; /* Make text bold */
+            /* Add any additional styles as needed */
+            margin : 0px 10px 0px 10px;
+        }
+        .alert-success {
+            background-color: #d4edda; /* Lighter green color */
+            border-color: #c3e6cb; /* Lighter border color */
+            color: #155724; /* Darker text color */
+            font-weight: bold; /* Make text bold */
+            /* Add any additional styles as needed */
+            margin : 0px 10px 0px 10px;
+
         }
     </style>
     <script>
@@ -100,6 +130,7 @@
     <div class="cust_card">
         <table style="width:100%">
             <form id="form_cari_kelas" action="" method="GET">
+                <input type="hidden" name="waktu_hidden" id="waktu_hidden">
             </form> 
             <tr>
                 <td>Kelas</td>
@@ -124,7 +155,7 @@
                     @if(isset($data_peserta))
                     <input type="date" name="waktu" id="waktu">
                     @else
-                    <input type="date" name="waktu" id="waktu" readonly>
+                    <input type="date" name="waktu" id="waktu">
                     @endif
                 </form>
                 </td>
@@ -135,6 +166,17 @@
             </tr>
         </table>
     </div>
+
+    @if(session('error'))
+    <div class="alert alert-danger">
+        {{session('error')}}
+    </div>
+    @elseif(session('success'))
+    <div class="alert alert-success">
+        {{session('success')}}
+    </div>
+    @endif
+    
     <div class="cust_card">
         <table style="width:100%">
             <tr>
@@ -208,13 +250,26 @@
     <script>
         $(document).ready(function () {          
             let currentDate = new Date().toISOString().split('T')[0];
-            @if(isset($data_peserta))
+      
             $('#waktu').val(currentDate);
+            $('#waktu_hidden').val(currentDate);
+            
+            @if(isset($cc_waktu))
+            let selected_date = new Date('{{$cc_waktu}}').toISOString().split('T')[0];
+            $('#waktu').val(selected_date);
+            $('#waktu_hidden').val(selected_date);
             @endif
+
             let kelas_text = $('#kelas option:selected').text();
             $('#modal_waktu').text(currentDate);
             $('#modal_kelas').text(kelas_text);
 
+
+            // tanggal 
+            $('#waktu').change(function (e) { 
+                let selected = $(this).val();
+                $('#waktu_hidden').val(selected);
+            });
 
             $('#logout').click(function (e) { 
                 // e.preventDefault();
@@ -259,12 +314,14 @@
                 }
                 // $('#submission').submit();
             });
-
+            
             // fungsi tombol cari
             $('#find_class').click(function (e) { 
                 // e.preventDefault();
                 let kelas = $('#kelas').val();
-                
+                // let waktu_hidden = $('#waktu').val().toString();
+                // $('#waktu_hidden').val(""+waktu_hidden);
+                // console.log($('#waktu_hidden').val());
                 $('#form_cari_kelas').attr('action', '/presensi/pilih-kelas/'+kelas);
                 $('#form_cari_kelas').submit();
 
