@@ -250,7 +250,7 @@
     <script>
         $(document).ready(function () {          
             let currentDate = new Date().toISOString().split('T')[0];
-      
+            console.log('Branch');
             $('#waktu').val(currentDate);
             $('#waktu_hidden').val(currentDate);
             
