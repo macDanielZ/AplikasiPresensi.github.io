@@ -16,7 +16,7 @@ class KaryawanController extends Controller
         if(count($check) == null){
             for($i = 0; $i < count($request->input('id_siswa')); $i++){
                 presensi::create([
-                    'id_karyawan' => 7,
+                    'id_karyawan' => 11,
                     'waktu' => $request->waktu,
                     'id_peserta' => $request->id_siswa[$i],
                     'status' => $request->status_siswa[$i],
