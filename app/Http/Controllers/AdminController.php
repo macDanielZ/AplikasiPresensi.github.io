@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Exports\DataTableExport;
+use App\Mail\AdminChangePassword;
+use App\Mail\DeleteUserNotify;
 use App\Models\kelas;
 use App\Models\peserta;
 use App\Models\presensi;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Mail\NewUserPasswordMail;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -163,13 +168,16 @@ class AdminController extends Controller
     public function tambah_user(Request $request){
         // dd($request->nama_karyawan);
         $check_email = User::where('email',$request->email)->get();
+        $gen_password = Str::random(8);
         if(count($check_email) == 0){
             User::create([
                 'nama_karyawan'=>$request->nama_karyawan,
                 'jabatan'=>$request->role,
                 'email'=>$request->email,
-                'password'=>bcrypt($request->password)
+                'password'=>bcrypt($gen_password)
             ]);
+            $user = User::where('email',$request->email)->first();
+            Mail::to($user->email)->queue(new NewUserPasswordMail($user,$gen_password));
             return redirect()->back()->with('success','Akun berhasil terdaftar !');
         }else{
             return redirect()->back()->with('error','Email yang digunakan sudah terdaftar !');
@@ -178,6 +186,7 @@ class AdminController extends Controller
 
     public function hapus_user($id){
         $select = User::find($id);
+        Mail::to($select->email)->send(new DeleteUserNotify($select));
         $name = $select->nama_karyawan;
         $select->delete();
         return redirect()->back()->with('success','Berhasil Menghapus Akun : '.$name);
@@ -192,10 +201,13 @@ class AdminController extends Controller
 
                 // ganti password
                
-                    $data= User::find($request->id);
+                    $data = User::find($request->id);
                     $data->nama_karyawan = $request->nama_karyawan;
                     $data->password = bcrypt($request->password);
                     $data->save();
+
+                    Mail::to($data->email)->send(new AdminChangePassword($data,$request->password));
+
 
                     return redirect()->back()->with('success', 'Berhasil Ubah Data !');
                     
@@ -227,6 +239,9 @@ class AdminController extends Controller
                             $data->email = $request->email;
                             $data->password = bcrypt($request->password);
                             $data->save();
+
+                            Mail::to($data->email)->send(new AdminChangePassword($data,$request->password));
+
 
                             return redirect()->back()->with('success', 'Berhasil Ubah Data !');
                             

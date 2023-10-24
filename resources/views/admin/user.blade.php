@@ -235,11 +235,6 @@
                     <td><input type="email" name="email" required></td>   
                 </tr>
                 <tr>
-                    <td>Password Pengguna</td>
-                    <td><input type="password" name="password" required></td>
-                    
-                </tr>
-                <tr>
                     <td>Jabatan Pengguna</td>
                     <td><select name="role" id="role" required>
                         <option value="Karyawan">Karyawan</option>
