@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Mail\NewUserPasswordMail;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 
 class AdminController extends Controller
@@ -26,20 +27,29 @@ class AdminController extends Controller
 
     public function user_list(){
         $data_user = User::all();
-        return view('admin.user',['data_user' => $data_user]);
+        $user = auth()->user();
+        $nama_user = $user->nama_karyawan;
+        $jabatan = $user->jabatan;
+        return view('admin.user',['nama_user'=>$nama_user,'jabatan'=>$jabatan,'data_user' => $data_user]);
     }
 
     public function siswa_list(){
         $data_peserta = peserta::leftJoin('kelas','pesertas.id_kelas','=','kelas.id_kelas')->orderBy('kelas.kelas','asc')->orderBy('pesertas.nama_peserta','asc')->get();
         $data_kelas = kelas::all();
         $data_kelas2 = kelas::all();
-        return view('admin.peserta',['data_kelas2'=>$data_kelas2,'data_kelas' => $data_kelas,'data_peserta' => $data_peserta]);
+        $user = auth()->user();
+        $nama_user = $user->nama_karyawan;
+        $jabatan = $user->jabatan;
+        return view('admin.peserta',['nama_user'=>$nama_user,'jabatan'=>$jabatan,'data_kelas2'=>$data_kelas2,'data_kelas' => $data_kelas,'data_peserta' => $data_peserta]);
     }
 
     //class management
     public function list_kelas(){
         $data_kelas = kelas::all();
-        return view('admin.kelas',['data_kelas'=>$data_kelas]);
+        $user = auth()->user();
+        $nama_user = $user->nama_karyawan;
+        $jabatan = $user->jabatan;
+        return view('admin.kelas',['nama_user'=>$nama_user,'jabatan'=>$jabatan,'data_kelas'=>$data_kelas]);
     }
     public function tambah_kelas(Request $request){
         $check_kelas = kelas::where('kelas',$request->kelas)->get();
@@ -76,8 +86,9 @@ class AdminController extends Controller
         $data_kelas = kelas::all();
         $data_presensi = presensi::all();
         $user = auth()->user();
+        $nama_user = $user->nama_karyawan;
         $jabatan = $user->jabatan;
-        return view('admin.Rekap',['jabatan'=>$jabatan,'data_peserta'=>$data_peserta,'data_kelas'=>$data_kelas,'data_presensi'=>$data_presensi]);
+        return view('admin.Rekap',['nama_user'=>$nama_user,'jabatan'=>$jabatan,'data_peserta'=>$data_peserta,'data_kelas'=>$data_kelas,'data_presensi'=>$data_presensi]);
     }
 
     public function export_excel(){
@@ -94,8 +105,9 @@ class AdminController extends Controller
         // dd($data_peserta);
         // dd($data_tabel);
         $user = auth()->user();
+        $nama_user = $user->nama_karyawan;
         $jabatan = $user->jabatan;
-        return view('admin.Rekap',['jabatan'=>$jabatan,'data_peserta'=>$data_peserta,'data_kelas'=>$data_kelas,'data_presensi'=>$data_presensi,'data_tabel'=>$data_tabel]);
+        return view('admin.Rekap',['nama_user'=>$nama_user,'jabatan'=>$jabatan,'data_peserta'=>$data_peserta,'data_kelas'=>$data_kelas,'data_presensi'=>$data_presensi,'data_tabel'=>$data_tabel]);
     }
 
     //student management
@@ -126,8 +138,11 @@ class AdminController extends Controller
 
     // attendance management
     public function presensi(){
+        $user = auth()->user();
+        $nama_user = $user->nama_karyawan;
+        $jabatan = $user->jabatan;
         $data_kelas = kelas::all();
-        return view('admin.presensi',['data_kelas'=>$data_kelas]);
+        return view('admin.presensi',['nama_user'=>$nama_user,'jabatan'=>$jabatan,'data_kelas'=>$data_kelas]);
     }
 
     public function delete(Request $request){
@@ -161,7 +176,11 @@ class AdminController extends Controller
             array_push($debug_arr,$x->nama_peserta);
         }
         // dd($debug_arr);
-        return view('admin.presensi',['data_presensi'=>$data_presensi,'data_kelas'=>$data_kelas,'id_kelas'=>$id_kelas,'data_peserta'=>$data_peserta]);
+        $user = auth()->user();
+        $nama_user = $user->nama_karyawan;
+        $jabatan = $user->jabatan;
+        // dd($request->s_waktu);
+        return view('admin.presensi',['sel_date'=>$request->s_waktu,'nama_user'=>$nama_user,'jabatan'=>$jabatan,'data_presensi'=>$data_presensi,'data_kelas'=>$data_kelas,'id_kelas'=>$id_kelas,'data_peserta'=>$data_peserta]);
     }
 
     // User Management
@@ -259,5 +278,19 @@ class AdminController extends Controller
                 }
 
         }
+    }
+    public function loc(Request $request){
+        $current_locale = App::currentLocale();
+        $sessionLocale = null;
+       if($current_locale == 'en'){
+        $sessionLocale = 'id';
+       }else{
+        $sessionLocale = 'en';
+       }
+    //    dd($sessionLocale);
+       session(['locale' => $sessionLocale]);
+
+    //    return redirect()->route('admin.index');
+       return redirect()->back();
     }
 }

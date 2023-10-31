@@ -30,6 +30,10 @@ Route::middleware('CheckRole:Karyawan')->group(function(){
 
 //Admin
 Route::middleware('CheckRole:Admin')->group(function(){
+// Localization
+
+Route::post('/admin/localization',[AdminController::class,'loc'])->name('loc');
+
     // Presensi
 Route::get('/admin',[AdminController::class,'index'])->name('admin.index');
 Route::get('/admin/presensi',[AdminController::class,'presensi'])->name('admin.presensi');

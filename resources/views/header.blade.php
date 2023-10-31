@@ -12,7 +12,7 @@
     <div style="display: flex; float-right">
         {{-- language btn --}}
         <div class="logout-container">
-            <form action="{{route('loc')}}" method="get">
+            <form action="{{route('loc')}}" method="POST">
             @csrf
             <button type="submit"><i  class="fa-solid fa-language"></i></button>
             </form>

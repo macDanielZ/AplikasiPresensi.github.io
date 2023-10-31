@@ -117,11 +117,7 @@
             <tr>
                 <td>{{__('admin_presence.tgl')}}</td>
                 <td>
-                    @if(isset($data_peserta))
                     <input type="date" name="waktu" id="waktu">
-                    @else
-                    <input type="date" name="waktu" id="waktu">
-                    @endif
                 </td>
             </tr>
             <tr>
@@ -254,6 +250,10 @@
         $(document).ready(function () {          
             let currentDate = new Date().toISOString().split('T')[0];
             $('#waktu').val(currentDate);
+            @if(isset($sel_date))
+            $('#waktu').val("{{$sel_date}}");
+
+            @endif
             let kelas_text = $('#kelas option:selected').text();
             $('#modal_waktu').text(currentDate);
             $('#modal_kelas').text(kelas_text);
