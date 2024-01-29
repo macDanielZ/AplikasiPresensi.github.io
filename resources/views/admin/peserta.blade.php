@@ -90,7 +90,7 @@
 
     {{-- content --}}
     <div class="cust_card">
-        <p style="font-size:25px;text-align:center"><b>Data Peserta Didik</b></p>
+        <p style="font-size:25px;text-align:center"><b>{{__('admin_student.title')}}</b></p>
     </div>
     
         {{-- alert --}}
@@ -105,7 +105,7 @@
     @endif
 
     <div class="cust_card">
-        <button data-bs-toggle="modal" data-bs-target="#tambah_user" class="btn btn-success">Tambah Kelas</button>
+        <button data-bs-toggle="modal" data-bs-target="#tambah_user" class="btn btn-success">{{__('admin_student.add_student')}}</button>
         {{-- data setiap orang --}}
         @foreach($data_peserta as $data_peserta)
         <div class="cust_card" style="background-color: #EADBC8">
@@ -113,7 +113,7 @@
                 <p style="font-weight: bold;font-size:20px;">{{$data_peserta->nama_peserta}} [ {{$data_peserta->kelas}} ]</p>
             <div style="display: flex;align-items: center">
                 <button data-bs-toggle="modal" data-bs-target="#edit_user_{{$data_peserta->id_peserta}}" class="btn btn-warning" style="font-size:0.8em">Edit</button>
-                <button data-bs-toggle="modal" data-bs-target="#delete_user_{{$data_peserta->id_peserta}}" class="btn btn-danger" style="font-size:0.8em">Hapus</button>
+                <button data-bs-toggle="modal" data-bs-target="#delete_user_{{$data_peserta->id_peserta}}" class="btn btn-danger" style="font-size:0.8em">{{__('admin_student.delete')}}</button>
             </div>
             </div>
         </div>
@@ -123,18 +123,18 @@
             <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header" style="background-color : #DAC0A3">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Hapus Peserta</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">{{__('admin_student.title_delete')}}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" style="background-color: #DAC0A3">             
-                <p style="text-align:center;font-weight: bold;font-size:20px;">Apakah anda yakin ingin menghapus peserta dengan nama "{{$data_peserta->nama_peserta}}"</p>
+                <p style="text-align:center;font-weight: bold;font-size:20px;">{{__('admin_student.content_delete')}} "{{$data_peserta->nama_peserta}}"</p>
                 </div>
                 <div class="modal-footer" style="background-color: #DAC0A3">
-                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
+                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin_student.cancel')}}</button>
                 <form action="{{route('admin.hapus_siswa',['id'=>$data_peserta->id_peserta])}}" method="POST">
                     @method('delete')
                     @csrf
-                    <button type="submit" class="btn btn-danger">Hapus Akun</button>           
+                    <button type="submit" class="btn btn-danger">{{__('admin_student.title_delete')}}</button>           
                 </form>
                 </div>
             </div>

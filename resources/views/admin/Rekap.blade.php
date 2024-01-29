@@ -236,7 +236,9 @@
                                     case 4:
                                         echo "Alpha";
                                         break;
-                                    
+                                    case 5:
+                                        echo "Pindah Kelas";
+                                        break;
                                 }
                             @endphp</td>
                             @endif

@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::get('/',[MainController::class,'login'])->name('login');
 Route::get('/login',[MainController::class,'login'])->name('login');
 Route::post('/autentikasi',[MainController::class,'autentikasi'])->name('autentikasi');
 Route::post('/logout',[MainController::class,'logout'])->name('logout');
@@ -37,7 +37,7 @@ Route::post('/admin/localization',[AdminController::class,'loc'])->name('loc');
     // Presensi
 Route::get('/admin',[AdminController::class,'index'])->name('admin.index');
 Route::get('/admin/presensi',[AdminController::class,'presensi'])->name('admin.presensi');
-Route::post('/admin/presensi/{id_kelas}',[AdminController::class,'cari_presensi'])->name('admin.cari_presensi');
+Route::get('/admin/presensi/{id_kelas}/{tanggal}',[AdminController::class,'cari_presensi'])->name('admin.cari_presensi');
 Route::post('/admin/user/update',[AdminController::class,'update'])->name('admin.update');
 Route::delete('/admin/user/delete',[AdminController::class,'delete'])->name('admin.delete_presensi');
 

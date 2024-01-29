@@ -93,10 +93,9 @@
     <div class="cust_card">
         <table style="width:100%">
             {{-- search --}}
-            <form id="form_cari_kelas" action="" method="POST">
-                @csrf
-                <input type="hidden" name="s_kelas" id="s_kelas">
-                <input type="hidden" name="s_waktu" id="s_waktu">
+            <form id="form_cari_kelas" action="" method="GET">
+                <input type="hidden" name="" id="s_kelas">
+                <input type="hidden" name="" id="s_waktu">
             </form> 
             <tr>
                 <td>{{__('admin_presence.kelas')}}</td>
@@ -252,7 +251,7 @@
             $('#waktu').val(currentDate);
             @if(isset($sel_date))
             $('#waktu').val("{{$sel_date}}");
-
+            console.log("{{$sel_date}}");
             @endif
             let kelas_text = $('#kelas option:selected').text();
             $('#modal_waktu').text(currentDate);
@@ -363,8 +362,9 @@
                 let kelas = $('#kelas').val();
                 $('#s_kelas').val(kelas);
                 $('#s_waktu').val($('#waktu').val());
+                let tanggal = $('#waktu').val();
                 
-                $('#form_cari_kelas').attr('action', '/admin/presensi/'+kelas);
+                $('#form_cari_kelas').attr('action', '/admin/presensi/'+kelas+'/'+tanggal);
                 $('#form_cari_kelas').submit();
 
                 // Ajax Functions

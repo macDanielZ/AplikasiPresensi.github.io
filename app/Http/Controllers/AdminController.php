@@ -97,26 +97,46 @@ class AdminController extends Controller
 
     public function rekap_cari_kelas(Request $request){
         // dd($request->all());
-        $data_tabel = presensi::leftJoin('pesertas','presensis.id_peserta','=','pesertas.id_peserta')->leftJoin('kelas','pesertas.id_kelas','=','kelas.id_kelas')->whereBetween('waktu',[$request->waktu_start,$request->waktu_end])->where('pesertas.id_kelas',$request->kelas)->orderBy('waktu','asc')->get();
+        $data_tabel = presensi::join('pesertas','presensis.id_peserta','=','pesertas.id_peserta')->join('kelas','pesertas.id_kelas','=','kelas.id_kelas')->whereBetween('waktu',[$request->waktu_start,$request->waktu_end])->where('pesertas.id_kelas',$request->kelas)->orderBy('waktu','asc')->get();
         // dd($data_presensi);
-        $data_peserta = peserta::leftJoin('kelas','pesertas.id_kelas','=','kelas.id_kelas')->where('pesertas.id_kelas',$request->kelas)->get();
+        $data_peserta = peserta::join('kelas','pesertas.id_kelas','=','kelas.id_kelas')->where('pesertas.id_kelas',$request->kelas)->get();
         $data_kelas = kelas::all();
         $data_presensi = presensi::all();
-        // dd($data_peserta);
-        // dd($data_tabel);
         $user = auth()->user();
         $nama_user = $user->nama_karyawan;
         $jabatan = $user->jabatan;
+        // dd($data_tabel);
         return view('admin.Rekap',['nama_user'=>$nama_user,'jabatan'=>$jabatan,'data_peserta'=>$data_peserta,'data_kelas'=>$data_kelas,'data_presensi'=>$data_presensi,'data_tabel'=>$data_tabel]);
     }
 
     //student management
     public function tambah_siswa(Request $request){
         // dd($request->all());
-        peserta::create([
+        $siswa_baru = peserta::create([
             'nama_peserta'=>$request->nama_peserta,
             'id_kelas'=>$request->kelas,
         ]);
+
+        // pindahan
+        
+        $list_waktu = presensi::select('waktu')->distinct()->get();
+        // dd($list_waktu);
+        if($list_waktu->isEmpty()){
+            return redirect()->back()->with('success','Peserta Baru Berhasil Ditambahkan');
+        }
+
+        foreach($list_waktu as $list_waktu){
+      
+            $presensi_siswa = new presensi();
+            $presensi_siswa->waktu = $list_waktu->waktu;
+            $presensi_siswa->id_peserta = $siswa_baru->id_peserta;
+            $presensi_siswa->status = 5;
+            $presensi_siswa->id_karyawan = 11;
+            $presensi_siswa->save();
+
+        }
+
+
         return redirect()->back()->with('success','Peserta Baru Berhasil Ditambahkan');
     }
     public function edit_siswa($id,Request $request){
@@ -164,10 +184,10 @@ class AdminController extends Controller
         return redirect()->route('admin.presensi');
     }
 
-    public function cari_presensi(Request $request,$id_kelas){
+    public function cari_presensi(Request $request,$id_kelas,$tanggal){
         // dd($request->s_waktu);
         // $data_presensi = presensi::leftJoin('pesertas','presensis.id_peserta','=','pesertas.id_peserta')->where('pesertas.id_kelas',$request->id_kelas)->where('presensis.waktu',$request->s_waktu)->get();
-        $data_presensi = presensi::leftJoin('pesertas','presensis.id_peserta','=','pesertas.id_peserta')->where('pesertas.id_kelas',$request->id_kelas)->where('presensis.waktu',$request->s_waktu)->get();
+        $data_presensi = presensi::leftJoin('pesertas','presensis.id_peserta','=','pesertas.id_peserta')->where('pesertas.id_kelas',$id_kelas)->where('presensis.waktu',$tanggal)->get();
         // dd($data_presensi);
         $data_peserta = peserta::where('id_kelas',$id_kelas)->get();
         $data_kelas = kelas::all();
@@ -179,8 +199,8 @@ class AdminController extends Controller
         $user = auth()->user();
         $nama_user = $user->nama_karyawan;
         $jabatan = $user->jabatan;
-        // dd($request->s_waktu);
-        return view('admin.presensi',['sel_date'=>$request->s_waktu,'nama_user'=>$nama_user,'jabatan'=>$jabatan,'data_presensi'=>$data_presensi,'data_kelas'=>$data_kelas,'id_kelas'=>$id_kelas,'data_peserta'=>$data_peserta]);
+        // dd($tanggal);
+        return view('admin.presensi',['sel_date'=>$tanggal,'nama_user'=>$nama_user,'jabatan'=>$jabatan,'data_presensi'=>$data_presensi,'data_kelas'=>$data_kelas,'id_kelas'=>$id_kelas,'data_peserta'=>$data_peserta]);
     }
 
     // User Management
