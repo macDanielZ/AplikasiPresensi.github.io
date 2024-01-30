@@ -111,6 +111,7 @@ class AdminController extends Controller
 
     //student management
     public function tambah_siswa(Request $request){
+        $user = auth()->user();
         // dd($request->all());
         $siswa_baru = peserta::create([
             'nama_peserta'=>$request->nama_peserta,
@@ -131,7 +132,7 @@ class AdminController extends Controller
             $presensi_siswa->waktu = $list_waktu->waktu;
             $presensi_siswa->id_peserta = $siswa_baru->id_peserta;
             $presensi_siswa->status = 5;
-            $presensi_siswa->id_karyawan = 11;
+            $presensi_siswa->id_karyawan = $user->id;
             $presensi_siswa->save();
 
         }
@@ -142,7 +143,7 @@ class AdminController extends Controller
     public function edit_siswa($id,Request $request){
         $select =peserta::find($id);
         $select->nama_peserta = $request->nama_peserta;
-        $select->id_kelas = $request->id_kelas;
+
         $select->save();
         return redirect()->back()->with('success','Peserta Berhasil Diperbarui');
 

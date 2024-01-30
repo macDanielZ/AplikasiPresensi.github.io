@@ -180,7 +180,7 @@
                                             </tr>
                                             <tr>
                                                 <td>Kelas Peserta</td>
-                                                <td><select name="id_kelas" id="role" required>
+                                                <td><select name="id_kelas" id="role" disabled>
                                                     @foreach($data_kelas2 as $l)
                                                     <option value="{{$l->id_kelas}}" @if($l->id_kelas == $dapes->id_kelas) selected @endif>{{$l->kelas}}</option>
                                                     @endforeach
