@@ -127,7 +127,7 @@
                         <p style="font-weight: bold;font-size:20px;">{{$data->nama_karyawan}}</p>
                     <div style="display: flex;align-items: center">
                         <button data-bs-toggle="modal" data-bs-target="#edit_user_{{$data->id}}" class="btn btn-warning" style="font-size:15px">Edit</button>
-                        <button data-bs-toggle="modal" data-bs-target="#delete_user_{{$data->id}}" class="btn btn-danger" style="font-size:15px">Hapus</button>
+                        <button data-bs-toggle="modal" data-bs-target="#delete_user_{{$data->id}}" class="btn btn-danger" style="font-size:15px">{{__('admin_user.delete_user')}}</button>
                         <script>
                             list_id_user.push('{{$data->id}}');
                         </script>
@@ -140,18 +140,18 @@
                     <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header" style="background-color : #DAC0A3">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Hapus Pengguna</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{__('admin_user.delete_user_title')}}</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body" style="background-color: #DAC0A3">             
-                        <p style="text-align:center;font-weight: bold;font-size:20px;">Apakah anda yakin ingin menghapus akun dengan nama "{{$data->nama_karyawan}}"</p>
+                        <p style="text-align:center;font-weight: bold;font-size:20px;">{{__('admin_user.delete_user_fill')}}"{{$data->nama_karyawan}}"</p>
                         </div>
                         <div class="modal-footer" style="background-color: #DAC0A3">
-                        <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
+                        <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin_user.delete_user_cancel')}}</button>
                         <form action="{{route('admin.hapus_user',['id'=>$data->id])}}" method="POST">
                             @method('delete')
                             @csrf
-                            <button type="submit" class="btn btn-danger">Hapus Akun</button>           
+                            <button type="submit" class="btn btn-danger">{{__('admin_user.delete_user_confirm')}}</button>           
                         </form>
                         </div>
                     </div>
@@ -163,34 +163,34 @@
                     <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header" style="background-color : #DAC0A3">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Pengguna : "{{$data->nama_karyawan}}"</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{__('admin_user.title_edit_user')}} "{{$data->nama_karyawan}}"</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body" style="background-color: #DAC0A3">             
                             <form action="{{route('admin.edit_user',['id'=>$data->id])}}" method="POST">
                                 @method('put')
                                 @csrf
-                                <table class="table" style="font-weight: bold">
+                                <table class="table" style="font-weight: bold;font-size:20px">
                                     <tbody>
                                     <tr>
-                                        <td>Nama Pengguna</td>
+                                        <td>{{__('admin_user.edit_user_name')}}</td>
                                         <td><input type="text" name="nama_karyawan" value="{{$data->nama_karyawan}}" required></td>
                                     </tr>
                                     <tr>
-                                        <td>Email Pengguna</td>
+                                        <td>{{__('admin_user.edit_user_email')}}</td>
                                         <td><input type="email" name="email" value="{{$data->email}}" required></td>   
                                     </tr>
                                     <tr>
-                                        <td>Password Baru Pengguna</td>
-                                        <td><input type="password" name="password" placeholder="Kosongkan jika sama"></td>
+                                        <td>{{__('admin_user.edit_user_password')}}</td>
+                                        <td><input type="password" name="password" placeholder="{{__('admin_user.edit_user_password_placeholder')}}"></td>
                                         
                                     </tr>
                                     <tr>
-                                        <td>Jabatan Pengguna</td>
+                                        <td>{{__('admin_user.edit_user_role')}}</td>
                                         <td><select name="role" id="role" required>
-                                            <option value="Karyawan" @if($data->jabatan == 'Karyawan') selected @endif>Karyawan</option>
-                                            <option value="Manajemen" @if($data->jabatan == 'Manajemen') selected @endif>Manajemen</option>
-                                            <option value="Admin" @if($data->jabatan == 'Admin') selected @endif>Admin</option>
+                                            <option value="{{__('admin_user.employees')}}" @if($data->jabatan == 'Karyawan') selected @endif>{{__('admin_user.employees')}}</option>
+                                            <option value="{{__('admin_user.management')}}" @if($data->jabatan == 'Manajemen') selected @endif>{{__('admin_user.management')}}</option>
+                                            <option value="{{__('admin_user.admin')}}" @if($data->jabatan == 'Admin') selected @endif>{{__('admin_user.admin')}}</option>
                                         </select></td>
                                     </tr>
                                 </tbody>
@@ -198,8 +198,8 @@
                           
                         </div>
                         <div class="modal-footer" style="background-color: #DAC0A3">
-                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
-                            <button type="submit" class="btn btn-warning">Perbarui Akun</button>           
+                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin_user.edit_user_cancel')}}</button>
+                            <button type="submit" class="btn btn-warning">{{__('admin_user.edit_user_update')}}</button>           
                         </div>
                     </form>
                     </div>
@@ -210,7 +210,7 @@
                 @else
                 <div class="accordion-body cust_card" style="background-color: #EADBC8">
                     <div class="d-flex justify-content-between">
-                        <p style="font-weight: bold;font-size:20px;">Tidak Ada User dengan jabatan Admin</p>
+                        <p style="font-weight: bold;font-size:20px;">{{__('admin_user.empty_role_admin')}}</p>
                     </div>
                 </div>
                 @endif
@@ -241,7 +241,7 @@
                             <p style="font-weight: bold;font-size:20px;">{{$data->nama_karyawan}}</p>
                         <div style="display: flex;align-items: center">
                             <button data-bs-toggle="modal" data-bs-target="#edit_user_{{$data->id}}" class="btn btn-warning" style="font-size:15px">Edit</button>
-                            <button data-bs-toggle="modal" data-bs-target="#delete_user_{{$data->id}}" class="btn btn-danger" style="font-size:15px">Hapus</button>
+                            <button data-bs-toggle="modal" data-bs-target="#delete_user_{{$data->id}}" class="btn btn-danger" style="font-size:15px">{{__('admin_user.delete_user')}}</button>
                             <script>
                                 list_id_user.push('{{$data->id}}');
                             </script>
@@ -254,18 +254,18 @@
                         <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header" style="background-color : #DAC0A3">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Hapus Pengguna</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">{{__('admin_user.delete_user_title')}}</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body" style="background-color: #DAC0A3">             
-                            <p style="text-align:center;font-weight: bold;font-size:20px;">Apakah anda yakin ingin menghapus akun dengan nama "{{$data->nama_karyawan}}"</p>
+                            <p style="text-align:center;font-weight: bold;font-size:20px;">{{__('admin_user.delee_user_fill')}}"{{$data->nama_karyawan}}"</p>
                             </div>
                             <div class="modal-footer" style="background-color: #DAC0A3">
-                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
+                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin_user.delete_user_cancel')}}</button>
                             <form action="{{route('admin.hapus_user',['id'=>$data->id])}}" method="POST">
                                 @method('delete')
                                 @csrf
-                                <button type="submit" class="btn btn-danger">Hapus Akun</button>           
+                                <button type="submit" class="btn btn-danger">{{__('admin_user.delete_user_confirm')}}</button>           
                             </form>
                             </div>
                         </div>
@@ -277,34 +277,34 @@
                         <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header" style="background-color : #DAC0A3">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Pengguna : "{{$data->nama_karyawan}}"</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">{{__('admin_user.title_edit_user')}} "{{$data->nama_karyawan}}"</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body" style="background-color: #DAC0A3">             
                                 <form action="{{route('admin.edit_user',['id'=>$data->id])}}" method="POST">
                                     @method('put')
                                     @csrf
-                                    <table class="table" style="font-weight: bold">
+                                    <table class="table" style="font-weight: bold;font-size:20px">
                                         <tbody>
                                         <tr>
-                                            <td>Nama Pengguna</td>
+                                            <td>{{__('admin_user.edit_user_name')}}</td>
                                             <td><input type="text" name="nama_karyawan" value="{{$data->nama_karyawan}}" required></td>
                                         </tr>
                                         <tr>
-                                            <td>Email Pengguna</td>
+                                            <td>{{__('admin_user.edit_user_email')}}</td>
                                             <td><input type="email" name="email" value="{{$data->email}}" required></td>   
                                         </tr>
                                         <tr>
-                                            <td>Password Baru Pengguna</td>
-                                            <td><input type="password" name="password" placeholder="Kosongkan jika sama"></td>
+                                            <td>{{__('admin_user.edit_user_password')}}</td>
+                                            <td><input type="password" name="password" placeholder="{{__('admin_user.edit_user_password_placeholder')}}"></td>
                                             
                                         </tr>
                                         <tr>
-                                            <td>Jabatan Pengguna</td>
+                                            <td>{{__('admin_user.edit_user_role')}}</td>
                                             <td><select name="role" id="role" required>
-                                                <option value="Karyawan" @if($data->jabatan == 'Karyawan') selected @endif>Karyawan</option>
-                                                <option value="Manajemen" @if($data->jabatan == 'Manajemen') selected @endif>Manajemen</option>
-                                                <option value="Admin" @if($data->jabatan == 'Admin') selected @endif>Admin</option>
+                                                <option value="{{__('admin_user.employees')}}" @if($data->jabatan == 'Karyawan') selected @endif>{{__('admin_user.employees')}}</option>
+                                                <option value="{{__('admin_user.management')}}" @if($data->jabatan == 'Manajemen') selected @endif>{{__('admin_user.management')}}</option>
+                                                <option value="{{__('admin_user.admin')}}" @if($data->jabatan == 'Admin') selected @endif>{{__('admin_user.admin')}}</option>
                                             </select></td>
                                         </tr>
                                     </tbody>
@@ -312,8 +312,8 @@
                               
                             </div>
                             <div class="modal-footer" style="background-color: #DAC0A3">
-                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
-                                <button type="submit" class="btn btn-warning">Perbarui Akun</button>           
+                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin_user.edit_user_cancel')}}</button>
+                                <button type="submit" class="btn btn-warning">{{__('admin_user.edit_user_update')}}</button>           
                             </div>
                         </form>
                         </div>
@@ -324,7 +324,7 @@
                     @else
                     <div class="accordion-body cust_card" style="background-color: #EADBC8">
                         <div class="d-flex justify-content-between">
-                            <p style="font-weight: bold;font-size:20px;">Tidak Ada User dengan jabatan Manajer</p>
+                            <p style="font-weight: bold;font-size:20px;">{{__('admin_user.empty_role_management')}}</p>
                         </div>
                     </div>
                     @endif
@@ -390,34 +390,34 @@
                         <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header" style="background-color : #DAC0A3">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Pengguna : "{{$data->nama_karyawan}}"</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">{{__('admin_user.title_edit_user')}} "{{$data->nama_karyawan}}"</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body" style="background-color: #DAC0A3">             
                                 <form action="{{route('admin.edit_user',['id'=>$data->id])}}" method="POST">
                                     @method('put')
                                     @csrf
-                                    <table class="table" style="font-weight: bold">
+                                    <table class="table" style="font-weight: bold;font-size:20px">
                                         <tbody>
                                         <tr>
-                                            <td>Nama Pengguna</td>
+                                            <td>{{__('admin_user.edit_user_name')}}</td>
                                             <td><input type="text" name="nama_karyawan" value="{{$data->nama_karyawan}}" required></td>
                                         </tr>
                                         <tr>
-                                            <td>Email Pengguna</td>
+                                            <td>{{__('admin_user.edit_user_email')}}</td>
                                             <td><input type="email" name="email" value="{{$data->email}}" required></td>   
                                         </tr>
                                         <tr>
-                                            <td>Password Baru Pengguna</td>
-                                            <td><input type="password" name="password" placeholder="Kosongkan jika sama"></td>
+                                            <td>{{__('admin_user.edit_user_password')}}</td>
+                                            <td><input type="password" name="password" placeholder="{{__('admin_user.edit_user_password_placeholder')}}"></td>
                                             
                                         </tr>
                                         <tr>
-                                            <td>Jabatan Pengguna</td>
+                                            <td>{{__('admin_user.edit_user_role')}}</td>
                                             <td><select name="role" id="role" required>
-                                                <option value="Karyawan" @if($data->jabatan == 'Karyawan') selected @endif>Karyawan</option>
-                                                <option value="Manajemen" @if($data->jabatan == 'Manajemen') selected @endif>Manajemen</option>
-                                                <option value="Admin" @if($data->jabatan == 'Admin') selected @endif>Admin</option>
+                                                <option value="{{__('admin_user.employees')}}" @if($data->jabatan == 'Karyawan') selected @endif>{{__('admin_user.employees')}}</option>
+                                                <option value="{{__('admin_user.management')}}" @if($data->jabatan == 'Manajemen') selected @endif>{{__('admin_user.management')}}</option>
+                                                <option value="{{__('admin_user.admin')}}" @if($data->jabatan == 'Admin') selected @endif>{{__('admin_user.admin')}}</option>
                                             </select></td>
                                         </tr>
                                     </tbody>
@@ -425,8 +425,8 @@
                               
                             </div>
                             <div class="modal-footer" style="background-color: #DAC0A3">
-                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
-                                <button type="submit" class="btn btn-warning">Perbarui Akun</button>           
+                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin_user.edit_user_cancel')}}</button>
+                                <button type="submit" class="btn btn-warning">{{__('admin_user.edit_user_update')}}</button>           
                             </div>
                         </form>
                         </div>
@@ -437,7 +437,7 @@
                     @else
                     <div class="accordion-body cust_card" style="background-color: #EADBC8">
                         <div class="d-flex justify-content-between">
-                            <p style="font-weight: bold;font-size:20px;">Tidak Ada User dengan jabatan Karyawan</p>
+                            <p style="font-weight: bold;font-size:20px;">{{__('admin_user.empty_role_employees')}}</p>
                         </div>
                     </div>
                     @endif
@@ -481,8 +481,8 @@
               </table>
             </div>
             <div class="modal-footer" style="background-color: #DAC0A3">
-              <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
-              <button type="submit" class="btn btn-success">Tambah</button>
+              <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin_user.new_user_cancel')}}</button>
+              <button type="submit" class="btn btn-success">{{__('admin_user.new_user_add')}}</button>
             </div>
           </div>
         </div>

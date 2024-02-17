@@ -32,7 +32,12 @@ return [
     // role
     'admin' => "Admin",
     'management' => 'Manajemen',
-    'employees' => 'Karyawan'
+    'employees' => 'Karyawan',
+
+     //empty role
+     'empty_role_management' => "Tidak ada pengguna terdaftar dengan jabatan Manajemen",
+     'empty_role_employees' => "Tidak ada pengguna terdaftar dengan jabatan Karyawan",
+     'empty_role_admin' => "Tidak ada pengguna terdaftar dengan jabatan Admin",
 
 ]
 

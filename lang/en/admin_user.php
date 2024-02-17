@@ -33,6 +33,11 @@ return [
     'admin' => "Admin",
     'management' => 'Management',
     'employees' => 'Employees',
+
+    //empty role
+    'empty_role_management' => "There's no user with management role assigned",
+    'empty_role_employees' => "There's no user with employees role assigned",
+    'empty_role_admin' => "There's no user with admin role assigned",
 ]
 
 ?>
