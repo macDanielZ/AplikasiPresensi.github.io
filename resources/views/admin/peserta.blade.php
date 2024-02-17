@@ -77,6 +77,11 @@
             background-color: transparent;
             border : none;
         }
+
+        .accordion-icon::before {
+        content: "\0025BC"; /* Down arrow */
+        float: right;
+        }
     </style>
     <script>
         let list_id_user = [];
@@ -114,8 +119,8 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading_{{$kelas->id_kelas}}">
                       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accord_{{$kelas->id_kelas}}" aria-expanded="false" aria-controls="collapseTwo">
-                        <p style="font-size:20px;font-weight: bold">{{$kelas->kelas}}</p>
-                      </button>
+                        <p style="font-size:20px;font-weight: bold">{{$kelas->kelas}}<span class="accordion-icon"></span></p>
+                    </button>
                     </h2>
                     <div id="accord_{{$kelas->id_kelas}}" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                         {{-- menghitung jumlah siswa pada kelas--}}
