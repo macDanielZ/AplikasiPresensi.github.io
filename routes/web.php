@@ -25,7 +25,11 @@ Route::middleware('CheckRole:Karyawan')->group(function(){
     // Route::get('/',[MainController::class,'login'])->name('login');
     Route::get('/presensi',[KaryawanController::class,'k_presensi'])->name('k_presensi');
     Route::get('/presensi/pilih-kelas/{id_kelas}',[KaryawanController::class,'PilihKelas'])->name('karyawan.pilih_kelas');
-    Route::post('/presensi/unggah',[KaryawanController::class,'unggah_presensi'])->name('karyawan.unggah_presensi');    
+    Route::post('/presensi/unggah',[KaryawanController::class,'unggah_presensi'])->name('karyawan.unggah_presensi');  
+
+    // localization
+    Route::post('/karyawan/localization',[AdminController::class,'loc'])->name('loc_k');
+
 });
 
 //Admin

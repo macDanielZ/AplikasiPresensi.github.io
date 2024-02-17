@@ -139,7 +139,7 @@
                 @endphp
                 <form action='{{route("$link")}}'>
                     
-                <td>Kelas</td>
+                <td>{{__('admin_recap.class')}}</td>
                 <td><select name="kelas" id="kelas">
                     @foreach ($data_kelas as $data_kelas)
                         @if(isset($id_kelas))
@@ -155,23 +155,23 @@
                 </select></td>
             </tr>
             <tr>
-                <td>Tanggal Pelaksanaan</td>
+                <td>{{__('admin_recap.date')}}</td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <input type="date" name="waktu_start" id="waktu_start" required><span> s.d </span><input type="date" name="waktu_end" id="waktu_end" required>
+                    <input type="date" name="waktu_start" id="waktu_start" required><span> {{__('admin_recap.until')}} </span><input type="date" name="waktu_end" id="waktu_end" required>
                 </td>
             </tr>
             <tr>
                 <td></td>
-                <td style="float:right;"><button style="margin: 10px 0px 10px 0px" class="btn btn-success" id="find_class" type="submit">Cari</button></td>
+                <td style="float:right;"><button style="margin: 10px 0px 10px 0px" class="btn btn-success" id="find_class" type="submit">{{__('admin_recap.search')}}</button></td>
             </tr>
         </table>
     </form>
     {{-- Content --}}
     </div>
     <div class="cust_card" style="overflow: auto">
-        <p>Data Presensi Peserta Didik</p>
+        <p>{{__('admin_recap.title_low')}}</p>
         @if(isset($data_tabel))
         @php
             $x = 0;

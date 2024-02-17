@@ -6,6 +6,8 @@ use App\Models\kelas;
 use App\Models\peserta;
 use App\Models\presensi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+
 
 class KaryawanController extends Controller
 {
@@ -41,6 +43,23 @@ class KaryawanController extends Controller
         // dd($cc_waktu);
         return view('karyawan.presensi',['cc_waktu'=>$cc_waktu,'data_peserta'=>$data_peserta,'data_kelas'=>$data_kelas,'id_kelas'=>$id_kelas]);
     }
+    // localization
+
+    public function loc(Request $request){
+        $current_locale = App::currentLocale();
+        $sessionLocale = null;
+       if($current_locale == 'en'){
+        $sessionLocale = 'id';
+       }else{
+        $sessionLocale = 'en';
+       }
+    //    dd($sessionLocale);
+       session(['locale' => $sessionLocale]);
+
+    //    return redirect()->route('admin.index');
+       return redirect()->back();
+    }
+
     // Fungsi Cadangan
     public function ajaxPilihKelas(Request $request){
         $data = array(
