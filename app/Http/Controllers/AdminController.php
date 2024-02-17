@@ -207,20 +207,28 @@ class AdminController extends Controller
     // User Management
     public function tambah_user(Request $request){
         // dd($request->nama_karyawan);
+        $input_role = $request->role;
         $check_email = User::where('email',$request->email)->get();
         $gen_password = Str::random(8);
-        if(count($check_email) == 0){
-            User::create([
-                'nama_karyawan'=>$request->nama_karyawan,
-                'jabatan'=>$request->role,
-                'email'=>$request->email,
-                'password'=>bcrypt($gen_password)
-            ]);
-            $user = User::where('email',$request->email)->first();
-            Mail::to($user->email)->queue(new NewUserPasswordMail($user,$gen_password));
-            return redirect()->back()->with('success','Akun berhasil terdaftar !');
+        if($request->role == 'Management'){
+            $input_role = 'Manajemen';
+            
+        }else if($request->role == 'Employees'){
+            $input_role = 'Karyawan';
         }else{
-            return redirect()->back()->with('error','Email yang digunakan sudah terdaftar !');
+            if(count($check_email) == 0){
+                User::create([
+                    'nama_karyawan'=>$request->nama_karyawan,
+                    'jabatan'=>$input_role,
+                    'email'=>$request->email,
+                    'password'=>bcrypt($gen_password)
+                ]);
+                $user = User::where('email',$request->email)->first();
+                Mail::to($user->email)->queue(new NewUserPasswordMail($user,$gen_password));
+                return redirect()->back()->with('success','Akun berhasil terdaftar !');
+            }else{
+                return redirect()->back()->with('error','Email yang digunakan sudah terdaftar !');
+            }
         }
     }
 

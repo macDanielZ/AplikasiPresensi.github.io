@@ -89,7 +89,7 @@
 
     {{-- content --}}
     <div class="cust_card">
-        <p style="font-size:25px;text-align:center"><b>Data Akun Pengguna</b></p>
+        <p style="font-size:25px;text-align:center"><b>{{__('admin_user.title')}}</b></p>
     </div>
     
         {{-- alert --}}
@@ -104,7 +104,7 @@
     @endif
 
     <div class="cust_card">
-        <button data-bs-toggle="modal" data-bs-target="#tambah_user" class="btn btn-success">Tambah Pengguna</button>
+        <button data-bs-toggle="modal" data-bs-target="#tambah_user" class="btn btn-success">{{__('admin_user.add_user')}}</button>
         {{-- admin --}}
         <div class="cust_card">
         <div class="accordion-item">
@@ -455,26 +455,26 @@
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header" style="background-color : #DAC0A3">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Pengguna</h1>
+              <h1 class="modal-title fs-5" id="exampleModalLabel">{{__('admin_user.title_add_user')}}</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" style="background-color: #DAC0A3">             
               <table class="table" style="font-weight: bold">
                 <tbody>
                 <tr>
-                    <td>Nama Pengguna</td>
+                    <td>{{__('admin_user.new_user_name')}}</td>
                     <td><input type="text" name="nama_karyawan" required></td>
                 </tr>
                 <tr>
-                    <td>Email Pengguna</td>
+                    <td>{{__('admin_user.new_user_email')}}</td>
                     <td><input type="email" name="email" required></td>   
                 </tr>
                 <tr>
-                    <td>Jabatan Pengguna</td>
+                    <td>{{__('admin_user.new_user_role')}}</td>
                     <td><select name="role" id="role" required>
-                        <option value="Karyawan">Karyawan</option>
-                        <option value="Manajemen">Manajemen</option>
-                        <option value="Admin">Admin</option>
+                        <option value="Karyawan">{{__('admin_user.employees')}}</option>
+                        <option value="Manajemen">{{__('admin_user.management')}}</option>
+                        <option value="Admin">{{__('admin_user.admin')}}</option>
                     </select></td>
                 </tr>
             </tbody>
