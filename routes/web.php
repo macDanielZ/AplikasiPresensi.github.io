@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::get('/',[MainController::class,'login'])->name('login');
 Route::get('/login',[MainController::class,'login'])->name('login');
 Route::post('/autentikasi',[MainController::class,'autentikasi'])->name('autentikasi');
 Route::post('/logout',[MainController::class,'logout'])->name('logout');
@@ -25,15 +25,23 @@ Route::middleware('CheckRole:Karyawan')->group(function(){
     // Route::get('/',[MainController::class,'login'])->name('login');
     Route::get('/presensi',[KaryawanController::class,'k_presensi'])->name('k_presensi');
     Route::get('/presensi/pilih-kelas/{id_kelas}',[KaryawanController::class,'PilihKelas'])->name('karyawan.pilih_kelas');
-    Route::post('/presensi/unggah',[KaryawanController::class,'unggah_presensi'])->name('karyawan.unggah_presensi');    
+    Route::post('/presensi/unggah',[KaryawanController::class,'unggah_presensi'])->name('karyawan.unggah_presensi');  
+
+    // localization
+    Route::post('/karyawan/localization',[AdminController::class,'loc'])->name('loc_k');
+
 });
 
 //Admin
 Route::middleware('CheckRole:Admin')->group(function(){
+// Localization
+
+Route::post('/admin/localization',[AdminController::class,'loc'])->name('loc');
+
     // Presensi
 Route::get('/admin',[AdminController::class,'index'])->name('admin.index');
 Route::get('/admin/presensi',[AdminController::class,'presensi'])->name('admin.presensi');
-Route::post('/admin/presensi/{id_kelas}',[AdminController::class,'cari_presensi'])->name('admin.cari_presensi');
+Route::get('/admin/presensi/{id_kelas}/{tanggal}',[AdminController::class,'cari_presensi'])->name('admin.cari_presensi');
 Route::post('/admin/user/update',[AdminController::class,'update'])->name('admin.update');
 Route::delete('/admin/user/delete',[AdminController::class,'delete'])->name('admin.delete_presensi');
 

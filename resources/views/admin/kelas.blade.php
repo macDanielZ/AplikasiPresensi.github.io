@@ -72,6 +72,10 @@
             justify-content: center;
             margin-left : 10px;
         }
+        .logout-container button{
+            background-color: transparent;
+            border : none;
+        }
     </style>
     <script>
         let list_id_user = [];
@@ -79,36 +83,13 @@
 </head>
 <body style="background-color: #EADBC8">
     {{-- header --}}
-    <div class="d-flex p-2 justify-content-between" style="border-radius: 0px 0px 15px 15px;border:1px solid black;background-image: linear-gradient(to bottom, #EADBC8, #DAC0A3);">
-        <div class="d-flex">
-            <div id="borderch">
-                <img src="/img/person.jpg" style="width:58px; height:58px;border-radius: 30px;object-fit: cover;" alt="">
-            </div>
-            <div style="font-size:23px; margin-left:10px;">
-                <p style="font-weight: bold">Halo, Andy!</p>
-                <div style="border:1px solid black" id="separator"></div>
-                <p style="font-size:18px;">Volunteers KEP</p>
-            </div>
-        </div>
-        <div style="display: flex; float-right">
-            <div id="logout" class="logout-container">
-                <i  class="fa-solid fa-arrow-right-from-bracket"></i>
-            </div>
-            <div id="home" class="logout-container">
-                <i  class="fa-solid fa-house"></i>
-            </div>
-            <div style="display: flex;align-items:center;margin-left:10px;">
-               <img src="/img/logo.png" alt="" style="width:50px;height:50px;">
-            </div>
-        {{-- <img src="/img/burger-bar.png" alt="" style="width:50px; heght:50px;"> --}}
-        </div>
-    </div>
+    @include('header')
 
 
 
     {{-- content --}}
     <div class="cust_card">
-        <p style="font-size:25px;text-align:center"><b>Data Kelas</b></p>
+        <p style="font-size:25px;text-align:center"><b>{{__('admin_class.title')}}</b></p>
     </div>
     
         {{-- alert --}}
@@ -123,7 +104,7 @@
     @endif
 
     <div class="cust_card">
-        <button data-bs-toggle="modal" data-bs-target="#tambah_user" class="btn btn-success">Tambah Kelas</button>
+        <button data-bs-toggle="modal" data-bs-target="#tambah_user" class="btn btn-success">{{__('admin_class.add_class')}}</button>
         {{-- data setiap orang --}}
         @foreach($data_kelas as $data_kelas)
         <div class="cust_card" style="background-color: #EADBC8">
@@ -131,7 +112,7 @@
                 <p style="font-weight: bold;font-size:20px;">{{$data_kelas->kelas}}</p>
             <div style="display: flex;align-items: center">
                 <button data-bs-toggle="modal" data-bs-target="#edit_user_{{$data_kelas->id_kelas}}" class="btn btn-warning" style="font-size:0.8em">Edit</button>
-                <button data-bs-toggle="modal" data-bs-target="#delete_user_{{$data_kelas->id_kelas}}" class="btn btn-danger" style="font-size:0.8em">Hapus</button>
+                <button data-bs-toggle="modal" data-bs-target="#delete_user_{{$data_kelas->id_kelas}}" class="btn btn-danger" style="font-size:0.8em">{{__('admin_class.delete_btn')}}</button>
             </div>
             </div>
         </div>
@@ -141,18 +122,18 @@
             <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header" style="background-color : #DAC0A3">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Hapus Kelas</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">{{__('admin_class.delete_class')}}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" style="background-color: #DAC0A3">             
-                <p style="text-align:center;font-weight: bold;font-size:20px;">Apakah anda yakin ingin menghapus kelas dengan nama "{{$data_kelas->kelas}}"</p>
+                <p style="text-align:center;font-weight: bold;font-size:20px;">{{__('admin_class.delete_fill')}} "{{$data_kelas->kelas}}"</p>
                 </div>
                 <div class="modal-footer" style="background-color: #DAC0A3">
-                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
+                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin_class.delete_cancel')}}</button>
                 <form action="{{route('admin.hapus_kelas',['id'=>$data_kelas->id_kelas])}}" method="POST">
                     @method('delete')
                     @csrf
-                    <button type="submit" class="btn btn-danger">Hapus Kelas</button>           
+                    <button type="submit" class="btn btn-danger">{{__('admin_class.delete_confirm')}}</button>           
                 </form>
                 </div>
             </div>
@@ -164,7 +145,7 @@
             <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header" style="background-color : #DAC0A3">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Kelas : "{{$data_kelas->kelas}}"</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">{{__('admin_class.edit_class')}} "{{$data_kelas->kelas}}"</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" style="background-color: #DAC0A3">             
@@ -174,7 +155,7 @@
                         <table class="table" style="font-weight: bold">
                             <tbody>
                             <tr>
-                                <td>Nama Kelas</td>
+                                <td>{{__('admin_class.class_name')}}</td>
                                 <td><input type="text" name="kelas" value="{{$data_kelas->kelas}}" required></td>
                             </tr>
                         </tbody>
@@ -182,8 +163,8 @@
                   
                 </div>
                 <div class="modal-footer" style="background-color: #DAC0A3">
-                    <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
-                    <button type="submit" class="btn btn-warning">Perbarui Kelas</button>           
+                    <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin_class.edit_cancel')}}</button>
+                    <button type="submit" class="btn btn-warning">{{__('admin_class.edit_confirm')}}</button>           
                 </div>
             </form>
             </div>
@@ -200,14 +181,14 @@
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header" style="background-color : #DAC0A3">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Kelas</h1>
+              <h1 class="modal-title fs-5" id="exampleModalLabel">{{__('admin_class.add_class')}}</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" style="background-color: #DAC0A3">             
               <table class="table" style="font-weight: bold">
                 <tbody>
                 <tr>
-                    <td>Nama Kelas</td>
+                    <td>{{__('admin_class.new_class_name')}}</td>
                     <td><input type="text" name="kelas" required></td>
                 </tr>
                 
@@ -215,8 +196,8 @@
               </table>
             </div>
             <div class="modal-footer" style="background-color: #DAC0A3">
-              <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
-              <button type="submit" class="btn btn-success">Tambah</button>
+              <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin_class.cancel_new_class')}}</button>
+              <button type="submit" class="btn btn-success">{{__('admin_class.register_new_class')}}</button>
             </div>
           </div>
         </div>

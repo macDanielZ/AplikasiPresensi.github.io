@@ -73,6 +73,15 @@
             justify-content: center;
             margin-left : 10px;
         }
+        .logout-container button{
+            background-color: transparent;
+            border : none;
+        }
+
+        .accordion-icon::before {
+        content: "\0025BC"; /* Down arrow */
+        float: right;
+        }
     </style>
     <script>
         let list_id_user = [];
@@ -80,36 +89,13 @@
 </head>
 <body style="background-color: #EADBC8">
     {{-- header --}}
-    <div class="d-flex p-2 justify-content-between" style="border-radius: 0px 0px 15px 15px;border:1px solid black;background-image: linear-gradient(to bottom, #EADBC8, #DAC0A3);">
-        <div class="d-flex">
-            <div id="borderch">
-                <img src="/img/person.jpg" style="width:58px; height:58px;border-radius: 30px;object-fit: cover;" alt="">
-            </div>
-            <div style="font-size:23px; margin-left:10px;">
-                <p style="font-weight: bold">Halo, Andy!</p>
-                <div style="border:1px solid black" id="separator"></div>
-                <p style="font-size:18px;">Volunteers KEP</p>
-            </div>
-        </div>
-        <div style="display: flex; float-right">
-            <div id="logout" class="logout-container">
-                <i  class="fa-solid fa-arrow-right-from-bracket"></i>
-            </div>
-            <div id="home" class="logout-container">
-                <i  class="fa-solid fa-house"></i>
-            </div>
-            <div style="display: flex;align-items:center;margin-left:10px;">
-               <img src="/img/logo.png" alt="" style="width:50px;height:50px;">
-            </div>
-        {{-- <img src="/img/burger-bar.png" alt="" style="width:50px; heght:50px;"> --}}
-        </div>
-    </div>
+    @include('header')
 
 
 
     {{-- content --}}
     <div class="cust_card">
-        <p style="font-size:25px;text-align:center"><b>Data Peserta Didik</b></p>
+        <p style="font-size:25px;text-align:center"><b>{{__('admin_student.title')}}</b></p>
     </div>
     
         {{-- alert --}}
@@ -124,83 +110,117 @@
     @endif
 
     <div class="cust_card">
-        <button data-bs-toggle="modal" data-bs-target="#tambah_user" class="btn btn-success">Tambah Kelas</button>
-        {{-- data setiap orang --}}
-        @foreach($data_peserta as $data_peserta)
-        <div class="cust_card" style="background-color: #EADBC8">
-            <div class="d-flex justify-content-between">
-                <p style="font-weight: bold;font-size:20px;">{{$data_peserta->nama_peserta}} [ {{$data_peserta->kelas}} ]</p>
-            <div style="display: flex;align-items: center">
-                <button data-bs-toggle="modal" data-bs-target="#edit_user_{{$data_peserta->id_peserta}}" class="btn btn-warning" style="font-size:0.8em">Edit</button>
-                <button data-bs-toggle="modal" data-bs-target="#delete_user_{{$data_peserta->id_peserta}}" class="btn btn-danger" style="font-size:0.8em">Hapus</button>
-            </div>
-            </div>
+        <button data-bs-toggle="modal" data-bs-target="#tambah_user" class="btn btn-success">{{__('admin_student.add_student')}}</button>
+        
+        {{-- Accordion Kategori --}}
+        
+            @foreach($data_kelas as $kelas)
+            <div class="cust_card">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading_{{$kelas->id_kelas}}">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accord_{{$kelas->id_kelas}}" aria-expanded="false" aria-controls="collapseTwo">
+                        <p style="font-size:20px;font-weight: bold">{{$kelas->kelas}}<span class="accordion-icon"></span></p>
+                    </button>
+                    </h2>
+                    <div id="accord_{{$kelas->id_kelas}}" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                        {{-- menghitung jumlah siswa pada kelas--}}
+                        @php
+                            $siswa_kelas = $data_peserta->where('id_kelas', $kelas->id_kelas);
+                        @endphp
+                        {{-- akhir menghitung jumlah siswa pada kelas --}}
+                        @if($siswa_kelas->count() > 0)
+                        @foreach($data_peserta as $dapes)
+                        @if($dapes->id_kelas == $kelas->id_kelas)
+                        <div class="accordion-body cust_card" style="background-color: #EADBC8">
+                            <div class="d-flex justify-content-between">
+                                <p style="font-weight: bold;font-size:20px;">{{$dapes->nama_peserta}} [ {{$dapes->kelas}} ]</p>
+                            <div style="display: flex;align-items: center">
+                                <button data-bs-toggle="modal" data-bs-target="#edit_user_{{$dapes->id_peserta}}" class="btn btn-warning" style="font-size:0.8em">Edit</button>
+                                <button data-bs-toggle="modal" data-bs-target="#delete_user_{{$dapes->id_peserta}}" class="btn btn-danger" style="font-size:0.8em">{{__('admin_student.delete')}}</button>
+                            </div>
+                            </div>
+                        </div>
+                
+                        {{-- Modal Delete User --}}
+                        <div class="modal fade" id="delete_user_{{$dapes->id_peserta}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color : #DAC0A3">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">{{__('admin_student.title_delete')}}</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" style="background-color: #DAC0A3">             
+                                <p style="text-align:center;font-weight: bold;font-size:20px;">{{__('admin_student.content_delete')}} "{{$dapes->nama_peserta}}"</p>
+                                </div>
+                                <div class="modal-footer" style="background-color: #DAC0A3">
+                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">{{__('admin_student.cancel')}}</button>
+                                <form action="{{route('admin.hapus_siswa',['id'=>$dapes->id_peserta])}}" method="POST">
+                                    @method('delete')
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger">{{__('admin_student.title_delete')}}</button>           
+                                </form>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                
+                
+                        {{-- modal Edit User --}}
+                        <div class="modal fade" id="edit_user_{{$dapes->id_peserta}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color : #DAC0A3">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Peserta : "{{$dapes->nama_peserta}}"</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" style="background-color: #DAC0A3">             
+                                    <form action="{{route('admin.edit_siswa',['id'=>$dapes->id_peserta])}}" method="POST">
+                                        @method('put')
+                                        @csrf
+                                        <table class="table" style="font-weight: bold">
+                                            <tbody>
+                                            <tr>
+                                                <td>Nama Peserta</td>
+                                                <td><input type="text" name="nama_peserta" value="{{$dapes->nama_peserta}}" required></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Kelas Peserta</td>
+                                                <td><select name="id_kelas" id="role" disabled>
+                                                    @foreach($data_kelas2 as $l)
+                                                    <option value="{{$l->id_kelas}}" @if($l->id_kelas == $dapes->id_kelas) selected @endif>{{$l->kelas}}</option>
+                                                    @endforeach
+                                                </select></td>
+                                            </tr>
+                                        </tbody>
+                                          </table>
+                                  
+                                </div>
+                                <div class="modal-footer" style="background-color: #DAC0A3">
+                                    <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
+                                    <button type="submit" class="btn btn-warning">Perbarui Akun</button>           
+                                </div>
+                            </form>
+                            </div>
+                            </div>
+                        </div>
+                        @endif
+                        @endforeach
+                        @else
+                        <div class="accordion-body cust_card" style="background-color: #EADBC8">
+                            <div class="d-flex justify-content-between">
+                                <p style="font-weight: bold;font-size:20px;">Tidak Ada Siswa pada {{$kelas->kelas}}</p>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                  </div>
+            
+           
         </div>
-
-        {{-- Modal Delete User --}}
-        <div class="modal fade" id="delete_user_{{$data_peserta->id_peserta}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color : #DAC0A3">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Hapus Peserta</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" style="background-color: #DAC0A3">             
-                <p style="text-align:center;font-weight: bold;font-size:20px;">Apakah anda yakin ingin menghapus peserta dengan nama "{{$data_peserta->nama_peserta}}"</p>
-                </div>
-                <div class="modal-footer" style="background-color: #DAC0A3">
-                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
-                <form action="{{route('admin.hapus_siswa',['id'=>$data_peserta->id_peserta])}}" method="POST">
-                    @method('delete')
-                    @csrf
-                    <button type="submit" class="btn btn-danger">Hapus Akun</button>           
-                </form>
-                </div>
-            </div>
-            </div>
-        </div>
-
-
-        {{-- modal Edit User --}}
-        <div class="modal fade" id="edit_user_{{$data_peserta->id_peserta}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color : #DAC0A3">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Peserta : "{{$data_peserta->nama_peserta}}"</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" style="background-color: #DAC0A3">             
-                    <form action="{{route('admin.edit_siswa',['id'=>$data_peserta->id_peserta])}}" method="POST">
-                        @method('put')
-                        @csrf
-                        <table class="table" style="font-weight: bold">
-                            <tbody>
-                            <tr>
-                                <td>Nama Peserta</td>
-                                <td><input type="text" name="nama_peserta" value="{{$data_peserta->nama_peserta}}" required></td>
-                            </tr>
-                            <tr>
-                                <td>Kelas Peserta</td>
-                                <td><select name="id_kelas" id="role" required>
-                                    @foreach($data_kelas2 as $l)
-                                    <option value="{{$l->id_kelas}}" @if($l->id_kelas == $data_peserta->id_kelas) selected @endif>{{$l->kelas}}</option>
-                                    @endforeach
-                                </select></td>
-                            </tr>
-                        </tbody>
-                          </table>
-                  
-                </div>
-                <div class="modal-footer" style="background-color: #DAC0A3">
-                    <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Batalkan</button>
-                    <button type="submit" class="btn btn-warning">Perbarui Akun</button>           
-                </div>
-            </form>
-            </div>
-            </div>
-        </div>
-
         @endforeach
+          {{-- end Accordion Kategori --}}
+        {{-- data setiap orang --}}
+        
     
 
     {{-- modal tambah user --}}

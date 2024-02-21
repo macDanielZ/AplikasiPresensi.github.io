@@ -56,7 +56,10 @@
             justify-content: center;
             margin-left : 10px;
         }
-        
+        .logout-container button{
+            background-color: transparent;
+            border : none;
+        }
     </style>
     <script>
          // init
@@ -84,42 +87,18 @@
 </head>
 <body style="background-color: #EADBC8">
     {{-- header --}}
-    <div class="d-flex p-2 justify-content-between" style="border-radius: 0px 0px 15px 15px;border:1px solid black;background-image: linear-gradient(to bottom, #EADBC8, #DAC0A3);">
-        <div class="d-flex">
-            <div id="borderch">
-                <img src="/img/person.jpg" style="width:58px; height:58px;border-radius: 30px;object-fit: cover;" alt="">
-            </div>
-            <div style="font-size:23px; margin-left:10px;">
-                <p style="font-weight: bold">Halo, Andy!</p>
-                <div style="border:1px solid black" id="separator"></div>
-                <p style="font-size:18px;">Volunteers KEP</p>
-            </div>
-        </div>
-        <div style="display: flex; float-right">
-            <div id="logout" class="logout-container">
-                <i  class="fa-solid fa-arrow-right-from-bracket"></i>
-            </div>
-            <div id="home" class="logout-container">
-                <i  class="fa-solid fa-house"></i>
-            </div>
-            <div style="display: flex;align-items:center;margin-left:10px;">
-               <img src="/img/logo.png" alt="" style="width:50px;height:50px;">
-            </div>
-        {{-- <img src="/img/burger-bar.png" alt="" style="width:50px; heght:50px;"> --}}
-        </div>
-    </div>
+    @include('header')
 
     {{-- card for find class --}}
     <div class="cust_card">
         <table style="width:100%">
             {{-- search --}}
-            <form id="form_cari_kelas" action="" method="POST">
-                @csrf
-                <input type="hidden" name="s_kelas" id="s_kelas">
-                <input type="hidden" name="s_waktu" id="s_waktu">
+            <form id="form_cari_kelas" action="" method="GET">
+                <input type="hidden" name="" id="s_kelas">
+                <input type="hidden" name="" id="s_waktu">
             </form> 
             <tr>
-                <td>Kelas</td>
+                <td>{{__('admin_presence.kelas')}}</td>
                 <td><select name="kelas" id="kelas">
                     @foreach ($data_kelas as $data_kelas)
                         @if(isset($id_kelas))
@@ -135,35 +114,31 @@
                 </select></td>
             </tr>
             <tr>
-                <td>Tanggal Pelaksanaan</td>
+                <td>{{__('admin_presence.tgl')}}</td>
                 <td>
-                    @if(isset($data_peserta))
                     <input type="date" name="waktu" id="waktu">
-                    @else
-                    <input type="date" name="waktu" id="waktu">
-                    @endif
                 </td>
             </tr>
             <tr>
                 <td></td>
-                <td style="float:right;"><button style="margin: 10px 0px 10px 0px" class="btn btn-success" id="find_class" type="submit">Cari</button></td>
+                <td style="float:right;"><button style="margin: 10px 0px 10px 0px" class="btn btn-success" id="find_class" type="submit">{{__('admin_presence.cari')}}</button></td>
             </tr>
         </table>
     </div>
     <div class="cust_card">
         <table style="width:100%">
             <tr>
-                <td>Data Presensi Peserta Didik</td>
+                <td>{{__('admin_presence.list1')}}</td>
                 <td style="float:right">@if(isset($data_peserta) && count($data_peserta) != null)
                     @if(count($data_presensi) != null)
-                    <button class="btn btn-danger" id="deletePresensi" data-bs-toggle="modal" data-bs-target="#deleteModal"> Hapus</button>
-                    <button id="upload" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-primary" type="submit">Perbarui</button>
+                    <button class="btn btn-danger" id="deletePresensi" data-bs-toggle="modal" data-bs-target="#deleteModal"> {{__("admin_presence.mlist7")}}</button>
+                    <button id="upload" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-primary" type="submit">{{__("admin_presence.mlist6")}}</button>
                     @endif @endif</td>
             </tr>
         </table>
         @if(isset($data_peserta))
             @if(count($data_peserta) == null)
-            <p style="color:gray;text-align:center;padding:20px 0px 20px 0px;font-weight:bold">Data Peserta didik pada kelas kosong</p>
+            {{-- <p style="color:gray;text-align:center;padding:20px 0px 20px 0px;font-weight:bold">Data Peserta didik pada kelas kosong</p> --}}
             @endif
         @if(count($data_presensi) != null)
         @foreach ($data_presensi as $dapre)
@@ -171,23 +146,23 @@
                 @if($dapre->id_peserta == $dapes->id_peserta)
                 <div class="cust_card" style="background-color: #EADBC8;">
                     <p style="font-weight: bold;font-size:25">{{$dapes->nama_peserta}}</p>
-                    <label style="font-weight: normal" for="hadir_{{$dapes->id_peserta}}">Hadir</label>
+                    <label style="font-weight: normal" for="hadir_{{$dapes->id_peserta}}">{{__('admin_presence.hadir')}}</label>
                     <input type="radio" value="1" name="status_{{$dapes->id_peserta}}" id="hadir_{{$dapes->id_peserta}}" style="margin-right: 15px;" @if($dapre->status == 1)checked @endif>
-                    <label style="font-weight: normal" for="sakit_{{$dapes->id_peserta}}">Sakit</label>
+                    <label style="font-weight: normal" for="sakit_{{$dapes->id_peserta}}">{{(__("admin_presence.sakit"))}}</label>
                     <input type="radio" value="2" name="status_{{$dapes->id_peserta}}" id="sakit_{{$dapes->id_peserta}}" style="margin-right: 15px;" @if($dapre->status == 2)checked @endif>
-                    <label style="font-weight: normal" for="izin_{{$dapes->id_peserta}}">Izin</label>
+                    <label style="font-weight: normal" for="izin_{{$dapes->id_peserta}}">{{__("admin_presence.izin")}}</label>
                     <input type="radio" value="3" name="status_{{$dapes->id_peserta}}" id="izin_{{$dapes->id_peserta}}" style="margin-right: 15px;" @if($dapre->status == 3)checked @endif>
-                    <label style="font-weight: normal" for="alpha_{{$dapes->id_peserta}}">Alpha</label>
+                    <label style="font-weight: normal" for="alpha_{{$dapes->id_peserta}}">{{__("admin_presence.alpha")}}</label>
                     <input type="radio" value="4" name="status_{{$dapes->id_peserta}}" id="alpha_{{$dapes->id_peserta}}" @if($dapre->status == 4)checked @endif>
                 </div>
                 @endif
             @endforeach
         @endforeach
         @else
-        <p style="color:gray;text-align:center;padding:20px 0px 20px 0px;font-weight:bold">Data Presensi Tidak Ditemukan</p>
+        <p style="color:gray;text-align:center;padding:20px 0px 20px 0px;font-weight:bold">{{__('admin_presence.list2')}}</p>
         @endif
         @else
-        <p style="color:gray;text-align:center;padding:20px 0px 20px 0px;font-weight:bold">Data Peserta didik kosong</p>
+        <p style="color:gray;text-align:center;padding:20px 0px 20px 0px;font-weight:bold">{{__('admin_presence.list3')}}</p>
         @endif
     </div>
 
@@ -196,7 +171,7 @@
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content" style="background-color: #DAC0A3">
             <div class="modal-header" style="background-color: #DAC0A3">
-              <h5 class="modal-title" id="exampleModalLabel" >Perbarui Data ?</h5>
+              <h5 class="modal-title" id="exampleModalLabel" >{{__("admin_presence.mlist9")}}</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-dialog modal-dialog-centered" style="height: 50%;background-color: #DAC0A3">
@@ -204,9 +179,9 @@
                 <div class="modal-body" style="background-color: #DAC0A3;border : 1px solid black;border-radius : 10px;box-shadow: 0px 5px 7px rgba(0, 0, 0, 0.7)">
                   <!-- Top Dialog -->
                   <div class="container p-3" style="background-color: #DAC0A3">
-                   <p><b>Data Presensi Peserta</b></p>
-                   <p>Tanggal Presensi : <span id="modal_waktu"></span></p>
-                   <p>Kelas : <span id="modal_kelas"></span></p>
+                   <p><b>{{__("admin_presence.mlist1")}}</b></p>
+                   <p>{{__("admin_presence.mlist2")}}<span id="modal_waktu"></span></p>
+                   <p>{{__("admin_presence.mlist3")}} : <span id="modal_kelas"></span></p>
                   </div>
                 </div>
               </div>
@@ -216,10 +191,10 @@
                 <div class="modal-body" style="background-color: #DAC0A3;border : 1px solid black;border-radius : 10px;box-shadow: 0px 5px 7px rgba(0, 0, 0, 0.7)">
                   <!-- Bottom Dialog -->
                   <div class="container p-3"style="background-color: #DAC0A3">
-                    Apakah anda yakin ingin memperbarui data presensi?
+                    {{__("admin_presence.mlist4")}}
                     <div style="display: flex;justify-content: space-between;margin-top:10px;">
-                        <button class="btn btn-danger" data-bs-dismiss="modal">Batalkan</button>
-                        <button id="unggah" type="submit" class="btn btn-primary">Perbarui</button>
+                        <button class="btn btn-danger" data-bs-dismiss="modal">{{__("admin_presence.mlist5")}}</button>
+                        <button id="unggah" type="submit" class="btn btn-primary">{{__("admin_presence.mlist6")}}</button>
                     </div>  
                   </div>
                 </div>
@@ -274,6 +249,10 @@
         $(document).ready(function () {          
             let currentDate = new Date().toISOString().split('T')[0];
             $('#waktu').val(currentDate);
+            @if(isset($sel_date))
+            $('#waktu').val("{{$sel_date}}");
+            console.log("{{$sel_date}}");
+            @endif
             let kelas_text = $('#kelas option:selected').text();
             $('#modal_waktu').text(currentDate);
             $('#modal_kelas').text(kelas_text);
@@ -383,8 +362,9 @@
                 let kelas = $('#kelas').val();
                 $('#s_kelas').val(kelas);
                 $('#s_waktu').val($('#waktu').val());
+                let tanggal = $('#waktu').val();
                 
-                $('#form_cari_kelas').attr('action', '/admin/presensi/'+kelas);
+                $('#form_cari_kelas').attr('action', '/admin/presensi/'+kelas+'/'+tanggal);
                 $('#form_cari_kelas').submit();
 
                 // Ajax Functions
