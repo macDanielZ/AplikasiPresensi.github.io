@@ -85,7 +85,7 @@ Route::get('/debug',[DebugController::class,'debug'])->name('debug');
 // Route::get('/main/{debug?}',[MainController::class,'index'],function($debug = null){return $debug;});
 // Route::get('/login',[MainController::class,'login']);
 // Route::get('/files',[MainController::class,'files']);
-Route::get('/rekap/{debug?}',[DebugController::class,'rekap']);
+// Route::get('/rekap/{debug?}',[DebugController::class,'rekap']);
 // Route::get('/presensi/{id_kelas}',[MainController::class,'presensi'])->name('presensi');
 // Route::get('/log',[MainController::class,'log']);
 // Route::post('/presensi_kehadiran',[MainController::class,'presensi_kehadiran'])->name('presensi_kehadiran');

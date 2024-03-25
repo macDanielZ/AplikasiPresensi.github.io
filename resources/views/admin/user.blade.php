@@ -230,12 +230,12 @@
                     {{-- magic goes here -w- --}}
                     {{-- itung jumlah admin --}}
                     @php
-                        $count_user = $data_user->where('jabatan','Manajer');
+                        $count_user = $data_user->where('jabatan','Manajemen');
                     @endphp
                     {{-- end itung jumlah admin --}}
                     @if($count_user->count() > 0)
                     @foreach($data_user as $data)
-                    @if($data->jabatan == 'Manajer')
+                    @if($data->jabatan == 'Manajemen')
                     <div class="cust_card" style="background-color: #EADBC8">
                         <div class="d-flex justify-content-between">
                             <p style="font-weight: bold;font-size:20px;">{{$data->nama_karyawan}}</p>
