@@ -41,7 +41,7 @@ class AdminChangePassword extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.adminChangePassword',
+            view: 'Mail.adminChangePassword',
         );
     }
 

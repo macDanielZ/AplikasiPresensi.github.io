@@ -37,7 +37,7 @@ class DeleteUserNotify extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.deleteUser',
+            view: 'Mail.deleteUser',
         );
     }
 

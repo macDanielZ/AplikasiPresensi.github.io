@@ -43,7 +43,7 @@ class NewUserPasswordMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.registrasi',
+            view: 'Mail.registrasi',
         );
     }
 
